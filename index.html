@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jeff's Benzo Coloring Studio</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#16213e;
+background:#fffdf7;overflow-x:hidden}
+body:before,body:after{content:"";position:fixed;z-index:-1;border-radius:50%;filter:blur(25px);opacity:.35}
+body:before{width:420px;height:420px;left:-150px;top:120px;background:#ffd166}
+body:after{width:500px;height:500px;right:-180px;top:80px;background:#8ec5ff}
+nav{height:74px;padding:0 6%;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #eee}
+.logo{font-weight:900;font-size:25px;letter-spacing:-1px;color:#151515}.logo small{display:block;font-size:11px;letter-spacing:2px;margin-top:-2px}.logo::first-line{font-size:32px}
+.navlinks{display:flex;gap:25px;align-items:center}.navlinks a{color:#222;text-decoration:none;font-size:14px;font-weight:600}
+.btn{border:0;border-radius:14px;padding:15px 24px;font-weight:800;color:white;background:linear-gradient(90deg,#ff8a00,#ff3d81,#6b5cff);box-shadow:0 8px 22px #8c63ff44;cursor:pointer;text-decoration:none}
+.hero{padding:72px 6% 50px;text-align:center;background:
+radial-gradient(circle at 8% 20%,#ffd66b88 0 8%,transparent 25%),
+radial-gradient(circle at 90% 15%,#76b9ff88 0 8%,transparent 25%),
+radial-gradient(circle at 80% 90%,#ff7ec488 0 7%,transparent 23%)}
+.badge{display:inline-block;padding:8px 14px;border-radius:30px;background:#fff;border:1px solid #eee;font-size:12px;font-weight:800}
+h1{font-size:clamp(44px,6vw,76px);line-height:1;letter-spacing:-3px;margin:20px auto 18px;max-width:900px}
+.gradient-text{background:linear-gradient(90deg,#ff5d8f,#765cff,#00a9ff);-webkit-background-clip:text;color:transparent}
+.hero p{font-size:19px;line-height:1.6;color:#596173;max-width:650px;margin:0 auto 32px}
+.upload{max-width:820px;margin:auto;background:#ffffffdd;border:2px dashed #8e72ff;border-radius:24px;padding:34px;box-shadow:0 18px 45px #4b3c8818}
+.upload-icon{font-size:45px}.upload h2{margin:8px 0}.upload p{font-size:14px;margin:0 0 20px}
+input[type=file]{display:none}.preview{display:none;margin:22px auto 0;max-width:360px;border-radius:16px;box-shadow:0 8px 25px #0002}.selected{margin-top:12px;font-size:14px;color:#4d5565}
+.section{padding:68px 6%;text-align:center}.section h2{font-size:38px;margin:0 0 10px}.section>p{color:#697386;margin-bottom:35px}
+.cards{display:grid;grid-template-columns:repeat(7,1fr);gap:12px;max-width:1250px;margin:auto}
+.card{background:#fff;border:1px solid #e7e7e7;border-radius:18px;padding:15px 9px;min-height:210px;box-shadow:0 8px 22px #0000000b;cursor:pointer;transition:.2s}
+.card:hover,.card.active{transform:translateY(-4px);box-shadow:0 12px 30px #00000018;border-color:#765cff}
+.card .art{height:105px;border-radius:12px;background:linear-gradient(135deg,#f3e9ff,#e7f8ff);display:flex;align-items:center;justify-content:center;font-size:45px;margin-bottom:12px}
+.card strong{font-size:13px;display:block}.card small{display:block;color:#777;font-size:11px;line-height:1.3;margin-top:6px}
+.cta{margin:35px auto 0;max-width:700px}.cta .btn{font-size:18px;width:100%}.notice{font-size:12px;color:#697386;margin-top:12px}
+.steps{background:#fff8ec}.stepgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;max-width:1000px;margin:auto}
+.step{background:#fff;border-radius:20px;padding:28px 18px;box-shadow:0 8px 22px #0000000b}.num{width:40px;height:40px;border-radius:50%;background:#17213e;color:#fff;display:flex;align-items:center;justify-content:center;margin:auto auto 12px;font-weight:800}
+.quote{padding:70px 6%;text-align:center;background:linear-gradient(120deg,#fff1c8,#ffe9f3,#eaf5ff)}.quote h2{font-size:36px;margin:0 auto 12px;max-width:700px}.quote p{color:#555}
+footer{padding:30px 6%;display:flex;justify-content:space-between;color:#777;font-size:13px;background:#fff}
+@media(max-width:900px){.cards{grid-template-columns:repeat(3,1fr)}.stepgrid{grid-template-columns:repeat(2,1fr)}.price-card{min-width:0}.section > div[style*="repeat(4"]{grid-template-columns:repeat(2,1fr)!important}.navlinks{display:none}}
+@media(max-width:520px){#tracking .section{padding-left:4%;padding-right:4%}#tracking > div > div[style*="repeat(5"]{grid-template-columns:repeat(2,1fr)!important}.cards{grid-template-columns:repeat(2,1fr)}.stepgrid{grid-template-columns:1fr}.section > div[style*="repeat(4"]{grid-template-columns:1fr!important}h1{letter-spacing:-2px}}
+
+.art{position:relative;overflow:hidden;border:1px solid #e6e6e6!important}
+.art:before{content:"";position:absolute;inset:10px;border:2px dashed #555;border-radius:10px;opacity:.18}
+.art-classic{background:linear-gradient(135deg,#fff3c7,#ffe0ec)!important;font-family:Georgia,serif}
+.art-classic span{font-size:24px;margin:0 4px}.art-classic b{display:block;font-size:14px;letter-spacing:2px;margin-top:8px}
+.art-portrait{background:linear-gradient(135deg,#e6f2ff,#f8e8ff)!important}
+.art-portrait .face{font-size:52px;border:3px solid #555;border-radius:50%;width:72px;height:72px;display:flex;align-items:center;justify-content:center}
+.art-portrait i{position:absolute;width:7px;height:7px;background:#555;border-radius:50%;top:42px}.art-portrait i:first-of-type{left:70px}.art-portrait i:last-of-type{right:70px}
+.art-bold{background:linear-gradient(135deg,#f4f4f4,#dfe8ff)!important}.art-bold b{font-size:17px;letter-spacing:3px}.art-bold span{font-size:20px}
+.art-graffiti{background:linear-gradient(135deg,#ffd3e3,#cdd4ff)!important;font-weight:900;transform-origin:center}
+.art-graffiti b{font-size:34px;transform:rotate(-7deg);text-shadow:2px 2px 0 #fff}.art-graffiti span{position:absolute;top:14px;right:18px;font-size:25px}.art-graffiti em{position:absolute;bottom:13px;left:18px;font-size:10px;letter-spacing:3px}
+.art-pet{background:linear-gradient(135deg,#dff8e9,#fff1c8)!important}.art-pet span:first-child{font-size:48px}.art-pet span:nth-child(2){font-size:24px;position:absolute;right:20px;top:18px}.art-pet span:last-child{position:absolute;bottom:12px;left:20px;font-size:25px}
+.art-fantasy{background:radial-gradient(circle,#fff,#eadfff)!important}.art-fantasy span{font-size:22px}.art-fantasy b{font-size:48px;margin:0 5px}.art-fantasy small{position:absolute;bottom:12px;right:25px;font-size:20px}
+.art-cartoon{background:linear-gradient(135deg,#fff0b5,#d8f0ff)!important}.art-cartoon b{font-size:25px;transform:rotate(-8deg)}.art-cartoon span{font-size:25px;position:absolute;right:20px;top:15px}.art-cartoon i{font-size:38px;font-style:normal;position:absolute;left:18px;bottom:8px}
+.card.active .art{border:2px solid #765cff!important;box-shadow:inset 0 0 0 3px #ffffff88}
+@media(max-width:520px){#checkout{padding-left:4%;padding-right:4%}}\n</style>
+</head>
+<body>
+<nav>
+  <div class="logo">JEFF'S<small>JEFF'S BENZO COLORING STUDIO</small></div>
+  <div class="navlinks"><a href="#styles">Styles</a><a href="#how">How It Works</a><a href="#create">Create</a><a href="#pricing">Pricing</a></div>
+  <a class="btn" href="#create">Create Yours</a>
+</nav>
+
+<section class="hero" id="create">
+  <div class="badge">✨ MAKE SOMETHING AMAZING TODAY</div>
+  <h1>Turn Your Photos<br><span class="gradient-text">Into Coloring Pages.</span></h1>
+  <p>Upload a favorite photo, choose your style, and turn your memories into something you can color, print, and enjoy.</p>
+  <div class="upload">
+    <div class="upload-icon">📷</div>
+    <h2>1. Upload Your Photo</h2>
+    <p>JPG, PNG or WEBP • Clear photos work best</p>
+    <label class="btn" for="photo">CHOOSE MY PHOTO</label>
+    <input id="photo" type="file" accept="image/*">
+    <div id="selected" class="selected"></div>
+    <img id="preview" class="preview" alt="Your uploaded photo preview">
+  </div>
+</section>
+
+
+<section class="section" id="google-ready" style="background:linear-gradient(135deg,#eef7ff,#fff4e8)">
+  <div style="max-width:980px;margin:auto">
+    <div style="display:inline-block;padding:7px 12px;border-radius:20px;background:#fff;border:1px solid #e3e7ef;font-size:12px;font-weight:800;letter-spacing:.5px">MADE FOR GOOGLE SEARCH TRAFFIC</div>
+    <h2 style="font-size:44px;margin:16px 0 10px">Your Photo. Your Style. Your Coloring Page.</h2>
+    <p style="max-width:680px;margin:0 auto 28px;color:#596173;font-size:18px;line-height:1.6">
+      Turn a favorite photo into a personalized printable coloring page. Choose from seven creative styles and make something that's uniquely yours.
+    </p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:30px">
+      <div style="background:#fff;border-radius:16px;padding:15px 20px;box-shadow:0 7px 20px #0000000b"><strong>7</strong><br><small>Creative Styles</small></div>
+      <div style="background:#fff;border-radius:16px;padding:15px 20px;box-shadow:0 7px 20px #0000000b"><strong>$3.99</strong><br><small>Starting Price</small></div>
+      <div style="background:#fff;border-radius:16px;padding:15px 20px;box-shadow:0 7px 20px #0000000b"><strong>Printable</strong><br><small>Digital File</small></div>
+    </div>
+    <a class="btn" href="#create" style="font-size:18px">CREATE MY COLORING PAGE — $3.99</a>
+    <div style="margin-top:15px;color:#697386;font-size:12px">Perfect for gifts, family memories, pets and creative projects.</div>
+  </div>
+</section>
+
+<section class="section" id="styles">
+  <h2>2. Choose Your Style</h2>
+  <p>Pick the look that fits your photo and your creativity.</p>
+  <div class="cards">
+    <div class="card active" onclick="selectStyle(this,'Classic Adult Coloring')">
+      <div class="art art-classic"><span>✿</span><span>❀</span><span>✿</span><b>COLOR</b></div>
+      <strong>Classic Adult Coloring</strong><small>Detailed & relaxing</small>
+    </div>
+    <div class="card" onclick="selectStyle(this,'Realistic Portrait')">
+      <div class="art art-portrait"><span class="face">◡</span><i></i><i></i></div>
+      <strong>Realistic Portrait</strong><small>Detailed faces & hair</small>
+    </div>
+    <div class="card" onclick="selectStyle(this,'Bold Line Art')">
+      <div class="art art-bold"><span>╱╲</span><b>LINE</b><span>╲╱</span></div>
+      <strong>Bold Line Art</strong><small>Clean, easy outlines</small>
+    </div>
+    <div class="card" onclick="selectStyle(this,'Graffiti Street Art')">
+      <div class="art art-graffiti"><b>ART</b><span>★</span><em>STYLE</em></div>
+      <strong>Graffiti Street Art</strong><small>Urban creativity</small>
+    </div>
+    <div class="card" onclick="selectStyle(this,'Pet Portrait')">
+      <div class="art art-pet"><span>🐕</span><span>🐾</span><span>♡</span></div>
+      <strong>Pet Portrait</strong><small>Made for your favorite pet</small>
+    </div>
+    <div class="card" onclick="selectStyle(this,'Fantasy & Mandala')">
+      <div class="art art-fantasy"><span>✦</span><b>❋</b><span>✧</span><small>❈</small></div>
+      <strong>Fantasy & Mandala</strong><small>Patterns & imagination</small>
+    </div>
+    <div class="card" onclick="selectStyle(this,'Cartoon & Comic')">
+      <div class="art art-cartoon"><b>WOW!</b><span>★</span><i>!</i></div>
+      <strong>Cartoon & Comic</strong><small>Fun comic-book style</small>
+    </div>
+  </div>
+  <div class="cta">
+    <button class="btn" onclick="createPage()">CREATE MY COLORING PAGE — $3.99</button>
+    <div id="message" class="notice">Secure checkout • One-time payment • Instant download</div>
+  </div>
+</section>
+
+
+<section class="section" id="generator" style="background:#f9fbff">
+  <h2>4. Your Coloring Page</h2>
+  <p>Create cleaner, lighter line art with adjustable detail and contrast.</p>
+  <div style="max-width:820px;margin:0 auto;background:#fff;border:1px solid #e5e7eb;border-radius:24px;padding:25px;box-shadow:0 12px 35px #0000000d">
+    <canvas id="coloringCanvas" style="width:100%;max-height:650px;object-fit:contain;border-radius:14px;background:white"></canvas>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px">
+      <button class="btn" onclick="generateColoringPage()">GENERATE COLORING PAGE</button>
+      <button id="downloadBtn" class="btn" style="background:#17213e;display:none" onclick="downloadColoringPage()">DOWNLOAD MY COLORING PAGE</button>
+    </div>
+    <div id="generatorStatus" style="margin-top:12px;color:#697386;font-size:13px"></div>
+  </div>
+</section>
+
+<section class="section steps" id="how">
+  <h2>3. How It Works</h2>
+  <p>Simple enough for anyone to create something special.</p>
+  <div class="stepgrid">
+    <div class="step"><div class="num">1</div><strong>Upload</strong><p>Choose your favorite photo.</p></div>
+    <div class="step"><div class="num">2</div><strong>Choose</strong><p>Pick your favorite style.</p></div>
+    <div class="step"><div class="num">3</div><strong>Create</strong><p>Turn it into coloring art.</p></div>
+    <div class="step"><div class="num">4</div><strong>Download</strong><p>Print and start coloring.</p></div>
+  </div>
+</section>
+
+<section class="quote" id="pricing">
+  <h2>“Be creative. Be inspired. Be you.”</h2>
+  <p>Coloring isn't just about filling a page — it's about making something that feels like yours.</p>
+  <strong>ONE CUSTOM COLORING PAGE — $3.99</strong>
+</section>
+
+
+
+<section class="section" id="packages" style="background:#fffaf2">
+  <h2>Choose Your Coloring Package</h2>
+  <p>Start small or make a whole collection.</p>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1100px;margin:0 auto;text-align:left">
+    <div class="price-card" style="background:#fff;border:2px solid #765cff;border-radius:20px;padding:25px;box-shadow:0 10px 28px #0000000c">
+      <div style="font-size:12px;font-weight:900;color:#765cff">START HERE</div><h3>1 Page</h3><div style="font-size:38px;font-weight:900">$3.99</div>
+      <p style="color:#697386">One custom coloring page.</p><a class="btn" href="#checkout">Choose 1 Page</a>
+    </div>
+    <div class="price-card" style="background:#fff;border:1px solid #e5e5e5;border-radius:20px;padding:25px">
+      <div style="font-size:12px;font-weight:900;color:#ff6b35">POPULAR</div><h3>3 Pages</h3><div style="font-size:38px;font-weight:900">$8.99</div>
+      <p style="color:#697386">Three custom pages for more coloring.</p><a class="btn" href="#create">Choose 3 Pages</a>
+    </div>
+    <div class="price-card" style="background:#fff;border:1px solid #e5e5e5;border-radius:20px;padding:25px">
+      <div style="font-size:12px;font-weight:900;color:#00a38c">BEST VALUE</div><h3>10 Pages</h3><div style="font-size:38px;font-weight:900">$19.99</div>
+      <p style="color:#697386">A full personalized coloring collection.</p><a class="btn" href="#create">Choose 10 Pages</a>
+    </div>
+    <div class="price-card" style="background:linear-gradient(135deg,#fff,#f2ecff);border:1px solid #ddd;border-radius:20px;padding:25px">
+      <div style="font-size:12px;font-weight:900;color:#d14cff">PREMIUM</div><h3>Custom Book</h3><div style="font-size:34px;font-weight:900">$29.99+</div>
+      <p style="color:#697386">A larger custom coloring-book project.</p><a class="btn" href="#create">Ask About Books</a>
+    </div>
+  </div>
+  <p style="font-size:12px;color:#697386;margin-top:20px">Prices shown are planned introductory prices. Payment processing will be connected before launch.</p>
+</section>
+
+
+<section class="section" id="tracking" style="background:#f4f8ff">
+  <div style="max-width:900px;margin:auto">
+    <div style="display:inline-block;padding:7px 12px;border-radius:20px;background:#fff;border:1px solid #dfe6f3;font-size:12px;font-weight:900">GOOGLE ADS READY</div>
+    <h2 style="margin-top:15px">Built to Measure What Works</h2>
+    <p style="max-width:680px;margin:0 auto 30px;color:#697386">When advertising is connected, we'll be able to measure the customer journey from ad click to purchase.</p>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;text-align:center">
+      <div style="background:#fff;border-radius:15px;padding:18px 8px;border:1px solid #e5eaf3"><strong>1</strong><br><small>Ad Click</small></div>
+      <div style="background:#fff;border-radius:15px;padding:18px 8px;border:1px solid #e5eaf3"><strong>2</strong><br><small>Website Visit</small></div>
+      <div style="background:#fff;border-radius:15px;padding:18px 8px;border:1px solid #e5eaf3"><strong>3</strong><br><small>Photo Upload</small></div>
+      <div style="background:#fff;border-radius:15px;padding:18px 8px;border:1px solid #e5eaf3"><strong>4</strong><br><small>Checkout</small></div>
+      <div style="background:#fff;border-radius:15px;padding:18px 8px;border:1px solid #e5eaf3"><strong>5</strong><br><small>Purchase</small></div>
+    </div>
+    <div style="margin:28px auto 0;padding:18px 20px;border-radius:16px;background:#fff;border:1px solid #e5eaf3;text-align:left">
+      <strong>Planned conversion events</strong>
+      <ul style="color:#697386;line-height:1.8;margin-bottom:0">
+        <li><b>view_home</b> — visitor reaches the site</li>
+        <li><b>photo_upload</b> — visitor selects a photo</li>
+        <li><b>style_selected</b> — visitor chooses a coloring style</li>
+        <li><b>checkout_start</b> — visitor begins payment</li>
+        <li><b>purchase</b> — successful paid order</li>
+        <li><b>download</b> — finished file is downloaded</li>
+      </ul>
+    </div>
+    <p style="font-size:12px;color:#697386;margin-top:16px">Google Analytics/Google Ads IDs will be added when the domain and advertising accounts are ready. No tracking IDs are hard-coded yet.</p>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <h2>Questions?</h2>
+  <p>Here are the basics before you create your first page.</p>
+  <div style="max-width:760px;margin:auto;text-align:left;display:grid;gap:12px">
+    <details style="background:#fff;padding:18px 20px;border-radius:14px;border:1px solid #e6e6e6"><summary><strong>What do I upload?</strong></summary><p style="color:#697386">A clear JPG, PNG or WEBP photo works best.</p></details>
+    <details style="background:#fff;padding:18px 20px;border-radius:14px;border:1px solid #e6e6e6"><summary><strong>What styles are available?</strong></summary><p style="color:#697386">Classic Adult Coloring, Realistic Portrait, Bold Line Art, Graffiti Street Art, Pet Portrait, Fantasy & Mandala, and Cartoon & Comic.</p></details>
+    <details style="background:#fff;padding:18px 20px;border-radius:14px;border:1px solid #e6e6e6"><summary><strong>How much does it cost?</strong></summary><p style="color:#697386">The introductory single-page product is $3.99. Payment checkout will be connected before launch.</p></details>
+    <details style="background:#fff;padding:18px 20px;border-radius:14px;border:1px solid #e6e6e6"><summary><strong>What do I receive?</strong></summary><p style="color:#697386">A printable digital coloring-page file. High-resolution paid delivery will be enabled when checkout is connected.</p></details>
+  </div>
+  <div style="margin-top:32px"><a class="btn" href="#create">START MY COLORING PAGE</a></div>
+</section>
+
+
+<section class="section" id="google-ads" style="background:linear-gradient(135deg,#fff7e8,#eef5ff)">
+  <div style="max-width:1050px;margin:auto">
+    <div style="display:inline-block;padding:7px 12px;border-radius:20px;background:#fff;border:1px solid #e1e5ee;font-size:12px;font-weight:900">STEP 9 • GOOGLE ADS</div>
+    <h2 style="margin-top:15px">Our First Google Search Campaign</h2>
+    <p style="max-width:720px;margin:0 auto 28px;color:#697386">We'll start with high-intent searches and measure purchases rather than paying just for traffic. Google responsive search ads can use up to 15 headlines and 4 descriptions, so we can test varied messages. citeturn0search0turn0search20</p>
+    <div style="background:#fff;border:1px solid #e4e7ed;border-radius:20px;padding:25px;text-align:left">
+      <h3>Campaign: Custom Coloring Pages</h3>
+      <p><strong>Landing page:</strong> benzocoloring.com</p>
+      <h4>Starter keywords</h4>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <span class="kw">"custom coloring pages"</span><span class="kw">"turn photo into coloring page"</span><span class="kw">"photo to coloring page"</span><span class="kw">"personalized coloring page"</span><span class="kw">"make a coloring page from a photo"</span><span class="kw">"printable custom coloring page"</span>
+      </div>
+      <h4>Ad headlines</h4>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+        <div class="adasset">Turn Photos Into Art</div><div class="adasset">Custom Coloring Pages</div><div class="adasset">Make Your Photo Colorable</div>
+        <div class="adasset">Personalized Coloring Page</div><div class="adasset">Create A Coloring Page</div><div class="adasset">7 Creative Styles</div>
+        <div class="adasset">Your Photo. Your Style.</div><div class="adasset">Custom Page From $3.99</div><div class="adasset">Color Your Favorite Photo</div>
+      </div>
+      <h4>Descriptions</h4>
+      <div class="adasset">Turn a favorite photo into a printable coloring page. Choose your style and create something unique.</div>
+      <div class="adasset">Upload a photo, choose from 7 styles, and create a personalized coloring page starting at $3.99.</div>
+      <div style="margin-top:18px;padding:14px;border-radius:14px;background:#f6f8fc;color:#697386;font-size:13px"><strong>Starting strategy:</strong> use tightly relevant phrase/exact keywords first, review the search terms report, and add negative keywords when irrelevant searches appear. Google documents exact, phrase, and broad match types and recommends using search-term data to refine targeting. citeturn0search2turn0search6</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="seo" style="background:#fff">
+  <div style="max-width:950px;margin:auto">
+    <div style="display:inline-block;padding:7px 12px;border-radius:20px;background:#f3f0ff;border:1px solid #e2dafd;font-size:12px;font-weight:900">STEP 10 • GOOGLE SEARCH VISIBILITY</div>
+    <h2 style="margin-top:15px">Make the Website Easy to Find</h2>
+    <p style="color:#697386;max-width:700px;margin:0 auto 28px">We'll prepare the site's search language around what customers are actually looking for.</p>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:15px;text-align:left">
+      <div class="seo-card"><strong>Page title</strong><p>Jeff's Benzo Coloring Studio | Custom Coloring Pages From Photos</p></div>
+      <div class="seo-card"><strong>Meta description</strong><p>Turn your favorite photo into a printable custom coloring page. Choose from 7 creative styles. Starting at $3.99.</p></div>
+      <div class="seo-card"><strong>Main topics</strong><p>custom coloring pages, photo coloring pages, personalized coloring pages, printable coloring pages</p></div>
+      <div class="seo-card"><strong>Trust content</strong><p>Clear pricing, FAQ, contact information, refund/delivery information, and a simple explanation of how the service works.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="launch" style="background:linear-gradient(135deg,#effff6,#f5f0ff)">
+  <div style="max-width:900px;margin:auto">
+    <div style="display:inline-block;padding:7px 12px;border-radius:20px;background:#fff;border:1px solid #dfe8e2;font-size:12px;font-weight:900">STEP 11 • LAUNCH CHECKLIST</div>
+    <h2 style="margin-top:15px">Ready to Turn It Into a Real Business</h2>
+    <p style="color:#697386">The remaining items are account/launch tasks, not design work.</p>
+    <div style="background:#fff;border-radius:20px;padding:25px;text-align:left;border:1px solid #e2e7e4">
+      <div class="launch-row">☐ <strong>Stripe account</strong><span>Create and verify the payment account.</span></div>
+      <div class="launch-row">☐ <strong>Domain</strong><span>Confirm and register benzocoloring.com.</span></div>
+      <div class="launch-row">☐ <strong>Hosting + HTTPS</strong><span>Put the finished site online securely.</span></div>
+      <div class="launch-row">☐ <strong>Real Stripe checkout</strong><span>Replace the demo checkout with live payment.</span></div>
+      <div class="launch-row">☐ <strong>Google Ads account</strong><span>Create the advertising account and campaign.</span></div>
+      <div class="launch-row">☐ <strong>Google tag</strong><span>Add the site-wide Google tag and purchase conversion. Google recommends the Google tag for website conversion measurement. citeturn0search1turn0search5</span></div>
+      <div class="launch-row">☐ <strong>Test order</strong><span>Complete a real low-value test transaction before advertising.</span></div>
+      <div class="launch-row">☐ <strong>Launch small</strong><span>Start with a controlled ad budget, measure purchases, then scale what works.</span></div>
+    </div>
+  </div>
+</section>
+
+<style>
+.kw,.adasset{display:inline-block;padding:9px 11px;border-radius:10px;background:#f5f7fb;border:1px solid #e3e7ef;font-size:12px}
+.adasset{margin-bottom:7px}.seo-card{background:#fff;border:1px solid #e5e8ee;border-radius:16px;padding:20px;box-shadow:0 7px 20px #00000008}.seo-card p{color:#697386;line-height:1.5}
+.launch-row{display:grid;grid-template-columns:28px 170px 1fr;gap:10px;align-items:start;padding:15px 0;border-bottom:1px solid #eee;color:#596173}.launch-row:last-child{border-bottom:0}.launch-row strong{color:#17213e}.launch-row span{font-size:13px}
+@media(max-width:800px){#google-ads .section>div>div[style*="repeat(3"],#seo>div>div[style*="repeat(2"]{grid-template-columns:1fr!important}.launch-row{grid-template-columns:25px 1fr}.launch-row span{grid-column:2}}
+</style>
+
+<footer><div>© 2026 Jeff's Benzo Coloring Studio</div><div>Custom digital coloring pages</div></footer>
+
+<script>
+let style='Classic Adult Coloring';
+const input=document.getElementById('photo');
+input.addEventListener('change',function(){
+  const file=this.files[0]; if(!file)return;
+  trackEvent('photo_upload');
+  document.getElementById('selected').textContent='Selected: '+file.name;
+  const img=document.getElementById('preview');
+  img.src=URL.createObjectURL(file); img.style.display='block';
+});
+function selectStyle(el,name){
+  trackEvent('style_selected', {style:name});
+  document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active'); style=name;
+  document.getElementById('message').textContent='Selected style: '+name+' • Ready to create';
+}
+function createPage(){
+  if(!input.files[0]){
+    document.getElementById('message').textContent='Please upload a photo first.';
+    input.click(); return;
+  }
+  document.getElementById('message').textContent='Photo ready! Scroll down to generate your coloring page.';
+  document.getElementById('generator').scrollIntoView({behavior:'smooth'});
+}
+
+function generateColoringPage(){
+  const file=input.files[0];
+  const status=document.getElementById('generatorStatus');
+  const canvas=document.getElementById('coloringCanvas');
+  const download=document.getElementById('downloadBtn');
+  const checkout=document.getElementById('checkoutBox');
+  if(!file){
+    status.textContent='Please upload a photo first.';
+    input.click(); return;
+  }
+  status.textContent='Creating a clean coloring-page preview...';
+  download.style.display='none';
+  checkout.style.display='none';
+
+  const img=new Image();
+  img.onload=function(){
+    const max=1600;
+    const scale=Math.min(1,max/Math.max(img.width,img.height));
+    canvas.width=Math.max(1,Math.round(img.width*scale));
+    canvas.height=Math.max(1,Math.round(img.height*scale));
+    const ctx=canvas.getContext('2d',{willReadFrequently:true});
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+
+    const w=canvas.width,h=canvas.height;
+    const data=ctx.getImageData(0,0,w,h);
+    const gray=new Float32Array(w*h);
+
+    for(let i=0,p=0;i<data.data.length;i+=4,p++){
+      // Slight contrast normalization before edge detection.
+      let g=0.299*data.data[i]+0.587*data.data[i+1]+0.114*data.data[i+2];
+      gray[p]=Math.max(0,Math.min(255,(g-128)*1.15+128));
+    }
+
+    const detail=Number(document.getElementById('detailRange').value);
+    const darkness=Number(document.getElementById('darkRange').value);
+    const threshold=55+(100-detail)*0.65;
+    const out=ctx.createImageData(w,h);
+
+    for(let y=1;y<h-1;y++){
+      for(let x=1;x<w-1;x++){
+        const p=y*w+x;
+        const gx=-gray[p-w-1]-2*gray[p-1]-gray[p+w-1]+gray[p-w+1]+2*gray[p+1]+gray[p+w+1];
+        const gy=-gray[p-w-1]-2*gray[p-w]-gray[p-w+1]+gray[p+w-1]+2*gray[p+w]+gray[p+w+1];
+        const edge=Math.sqrt(gx*gx+gy*gy);
+        const q=p*4;
+        const v=edge>threshold ? Math.max(0,255-darkness) : 255;
+        out.data[q]=out.data[q+1]=out.data[q+2]=v;
+        out.data[q+3]=255;
+      }
+    }
+    ctx.putImageData(out,0,0);
+    download.style.display='inline-block';
+    checkout.style.display='block';
+    status.textContent='Preview ready — '+style+' style selected.';
+    document.getElementById('generator').scrollIntoView({behavior:'smooth'});
+  };
+  img.src=URL.createObjectURL(file);
+}
+
+function startCheckout(){
+  trackEvent('checkout_start', {value:3.99, currency:'CAD'});
+  document.getElementById('generatorStatus').textContent =
+    'Checkout connection is the next business setup. No payment has been taken on this demo.';
+  alert('Jeff's Benzo Coloring Studio: $3.99 checkout is ready to connect to your payment provider.');
+}
+
+function trackEvent(name, params={}){
+  // Google Analytics / Google Ads will call this when IDs are connected.
+  // For now it is a safe local event hook.
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({event:name, ...params});
+}
+
+function beginStripeCheckout(){
+  const email=document.getElementById('customerEmail').value.trim();
+  const notice=document.getElementById('checkoutNotice');
+  if(!email || !email.includes('@')){
+    notice.textContent='Please enter a valid email address to continue.';
+    return;
+  }
+  trackEvent('checkout_start', {value:3.99, currency:'CAD', product:'custom_coloring_page'});
+  notice.textContent='Stripe is not connected yet. When your Stripe account is ready, this button will open the live $3.99 checkout.';
+  // Demo flow only: show the current generated page as the success preview.
+  setTimeout(showSuccessPreview, 350);
+}
+
+function showSuccessPreview(){
+  const source=document.getElementById('coloringCanvas');
+  const target=document.getElementById('finalCanvas');
+  if(!source || !target || !source.width) return;
+  target.width=source.width;
+  target.height=source.height;
+  target.getContext('2d').drawImage(source,0,0);
+  const box=document.getElementById('successStyle');
+  if(box) box.textContent=style;
+  document.getElementById('success').scrollIntoView({behavior:'smooth'});
+  trackEvent('purchase', {value:3.99, currency:'CAD', demo:true});
+}
+
+function downloadFinalPage(){
+  const canvas=document.getElementById('finalCanvas');
+  if(!canvas.width) return;
+  const link=document.createElement('a');
+  link.download='jeffs-benzo-coloring-studio-final-page.png';
+  link.href=canvas.toDataURL('image/png');
+  link.click();
+  trackEvent('download', {product:'custom_coloring_page'});
+}
+
+function downloadColoringPage(){
+  trackEvent('download');
+  const canvas=document.getElementById('coloringCanvas');
+  const link=document.createElement('a');
+  link.download='jeffs-benzo-coloring-studio-coloring-page.png';
+  link.href=canvas.toDataURL('image/png');
+  link.click();
+}
+</script>
+</body>
+</html>
